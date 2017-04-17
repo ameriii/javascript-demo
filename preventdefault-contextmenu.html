@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        html,body{
+            margin:0;
+            padding:0;
+        }
+        div#box{
+            width:400px;
+            height:400px;
+            background-color:red;
+        }
+        ul{
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: none;
+            position: absolute;
+            left: 10px;
+            top:10px;
+        }
+
+        li{
+            width: 100px;
+            height: 50px;
+            line-height: 50px;
+            color: #000;
+            background: gray;
+            border-bottom: 1px solid white;
+            text-align: center;
+
+        }
+    </style>
+</head>
+<body>
+    <div id="box"></div>
+
+        <ul id="rList">
+            <li>剪切</li>
+            <li>复制</li>
+            <li>粘贴</li>
+        </ul>
+
+    <script>
+        var boxNode = document.getElementById('box');
+//      选中节点阻止右键菜单
+        boxNode.oncontextmenu=function(){
+            console.log('阻止右键菜单');
+            return false;
+        }
+
+
+
+        boxNode.onmousedown = function(evt){
+            var oEvent = evt||window.event;
+//             事件对象
+            console.log(oEvent);
+//            目标节点
+            console.log(oEvent.target);
+//            鼠标点击的左中右键
+            console.log(oEvent.button);
+
+            if(oEvent.preventDefault){
+                oEvent.preventDefault();
+            };
+            if(oEvent.stopPropagation){
+                oEvent.stopPropagation();
+            }else {
+                oEvent.returnValue = false; // 解决IE8右键弹出
+                oEvent.cancelBubble = true;
+            }
+
+
+            var ulNode = document.getElementById('rList');
+
+
+            // 选中节点阻止右键菜单
+            ulNode.oncontextmenu=function(){
+                console.log('阻止ulNode右键菜单');
+                return false;
+            }
+
+
+
+            //判断使用的是鼠标的哪个按键，右键的话显示自定义菜单
+            if(oEvent.button == 2){
+                //显示自定义的右键菜单
+                ulNode.style.display = 'block';
+
+//              多加3px防止点击在出现的菜单上导致，没有阻止右键菜单弹出
+                ulNode.style.left = oEvent.clientX +3+ 'px';
+                ulNode.style.top = oEvent.clientY +3+ 'px';
+
+            }else if(oEvent.button == 0){
+
+                ulNode.style.display = 'none';
+            }
+
+        }
+
+
+    </script>
+</body>
+</html>
